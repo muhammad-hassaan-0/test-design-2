@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dar ul Eman wa al Taqwa</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            900: '#064e3b',
+                            950: '#022c22',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Spectral', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    backgroundImage: {
+                        'marble': "url('https://www.transparenttextures.com/patterns/white-marble.png')",
+                    },
+                    animation: {
+                        'float': 'float 2s ease-in-out infinite',
+                        'pulse-slow': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Aesthetics */
+        body {
+            background-color: #FAFAFA;
+            color: #1a2e26;
+        }
+
+        /* The Marble Texture Overlay */
+        .marble-bg::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+        
+        .glass-panel-dark {
+            background: rgba(6, 78, 59, 0.05); /* Emerald Tint */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(217, 119, 6, 0.2); /* Gold Border */
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Scroll Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.3s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; 
+        }
+
+        /* Text Selection */
+        ::selection {
+            background: #d1fae5; /* Light emerald */
+            color: #064e3b;
+        }
+    </style>
+</head>
+<body class="marble-bg antialiased selection:bg-emerald-100 selection:text-emerald-900 overflow-x-hidden">
+
+    <!-- Floating Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 flex justify-center py-4 md:py-6 px-3 md:px-4">
+        <div class="glass-nav rounded-full px-4 md:px-8 py-3 flex items-center gap-4 md:gap-8 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <!-- Logo -->
+            <div class="flex items-center gap-2 border-r border-gray-200 pr-6">
+                <div class="w-8 h-8 rounded-full border border-gold-600 flex items-center justify-center bg-emerald-900/5">
+                    <span class="font-arabic text-gold-600 text-lg">د</span>
+                </div>
+                <span class="font-serif font-medium text-emerald-950 tracking-wide hidden md:block">Dar ul Eman</span>
+            </div>
+
+            <!-- Links -->
+            <div id="mobile-menu" class="hidden md:flex items-center gap-4 md:gap-6 font-sans text-xs md:text-sm font-light text-gray-600">
+                <a href="#about" class="hover:text-gold-600 transition-colors">About</a>
+                <a href="#objectives" class="hover:text-gold-600 transition-colors">Objectives</a>
+                <a href="#media" class="hover:text-gold-600 transition-colors">Media</a>
+                <a href="#regions" class="hover:text-gold-600 transition-colors">Regions</a>
+                <a href="#fatwa" class="hover:text-gold-600 transition-colors">Fatwa</a>
+            </div>
+
+            <!-- Mobile Menu Icon (shown only on mobile) -->
+            <button class="md:hidden text-gray-600" onclick="toggleMobileMenu()">
+                <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Tools -->
+            <div class="flex items-center gap-2 md:gap-4 pl-3 md:pl-6 border-l border-gray-200">
+                <span class="text-xs font-semibold text-gray-400 cursor-pointer hover:text-emerald-800">EN</span>
+                <div class="w-px h-3 bg-gray-300"></div>
+                <button onclick="toggleTasbeeh()" class="relative group">
+                    <i data-lucide="activity" class="w-4 h-4 text-emerald-700"></i> <!-- Tasbeeh icon placeholder -->
+                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-gold-500 rounded-full"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tasbeeh Floating Widget (Hidden by default) -->
+    <div id="tasbeeh-widget" class="fixed bottom-4 md:bottom-8 right-4 md:right-8 z-40 transform translate-y-20 opacity-0 transition-all duration-200 pointer-events-none">
+        <div class="glass-panel-dark rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col items-center gap-4 w-40 md:w-48 backdrop-blur-xl bg-white/90">
+            <h4 class="font-serif text-emerald-900 text-sm">Digital Tasbeeh</h4>
+            <div class="font-mono text-4xl text-gold-600 font-light" id="tasbeeh-count">0</div>
+            <button onclick="countTasbeeh()" class="w-12 h-12 rounded-full border border-emerald-200 flex items-center justify-center hover:bg-emerald-50 active:scale-95 transition-all shadow-inner">
+                <div class="w-8 h-8 rounded-full bg-emerald-900/10"></div>
+            </button>
+            <button onclick="resetTasbeeh()" class="text-xs text-gray-400 hover:text-red-400">Reset</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-0">
+        <!-- Background Ambience -->
+        <div class="absolute inset-0 z-0">
+            <!-- Simulated blurred corridor -->
+            <div class="absolute inset-0 bg-gradient-to-b from-white/20 via-white/60 to-white"></div>
+            <img src="https://images.unsplash.com/photo-1542044801-30d3e45ae49a?q=80&w=2000&auto=format&fit=crop" 
+                 class="w-full h-full object-cover opacity-10 blur-md scale-110" alt="Mosque Interior">
+        </div>
+
+        <div class="relative z-10 container mx-auto px-6 text-center reveal active">
+            <!-- Glass Card -->
+            <div class="glass-panel mx-auto max-w-3xl rounded-3xl p-8 md:p-16 border-t border-white shadow-2xl relative overflow-hidden">
+                <!-- Gold Accent Line -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-gold-400 rounded-b-full"></div>
+                
+                <div class="mb-6 opacity-60">
+                    <span class="font-arabic text-2xl text-gold-600 block mb-2">بسم الله الرحمن الرحيم</span>
+                </div>
+
+                <h1 class="font-serif text-4xl md:text-6xl text-emerald-950 leading-tight mb-6 tracking-tight">
+                    A Journey of <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-800 to-emerald-600">Knowledge</span>, <br>
+                    Revival & Heart-Purification.
+                </h1>
+
+                <p class="font-sans font-light text-gray-600 text-sm md:text-base max-w-xl mx-auto leading-relaxed mb-8 md:mb-10 tracking-wide">
+                    A mission under <span class="font-medium text-emerald-900">Hazrat Mufti Mukhtar-ud-Din Shah DB</span> — continuing the spiritual legacy of Hazrat Zakariyya Kandhalwi RA.
+                </p>
+
+                <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                    <button class="px-6 md:px-8 py-2 md:py-3 bg-emerald-900 text-white font-sans text-sm md:text-base font-light rounded-full shadow-lg hover:bg-emerald-800 transition-all duration-200 hover:shadow-emerald-900/20 active:scale-95 flex items-center gap-2">
+                        Enter the Journey
+                        <i data-lucide="arrow-right" class="w-4 h-4 opacity-70"></i>
+                    </button>
+                    <button class="px-6 md:px-8 py-2 md:py-3 border border-emerald-900/20 text-emerald-900 text-sm md:text-base rounded-full hover:bg-emerald-50 transition-all duration-200 font-light">
+                        Find Markaz
+                    </button>
+                    <button class="px-6 md:px-8 py-2 md:py-3 border border-emerald-900/20 text-emerald-900 text-sm md:text-base rounded-full hover:bg-emerald-50 transition-all duration-200 font-light">
+                        Ask a Scholar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Storytelling / Silsila Section -->
+    <section class="py-24 relative" id="about">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="relative pl-8 md:pl-0">
+                <!-- Vertical Line -->
+                <div class="absolute left-8 md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gold-400 to-transparent"></div>
+
+                <!-- Node 1 -->
+                <div class="relative mb-24 reveal group">
+                    <div class="md:flex items-center justify-between">
+                        <div class="hidden md:block w-5/12 text-right pr-12">
+                            <h3 class="font-serif text-2xl text-emerald-900">Hazrat Zakariyya RA</h3>
+                            <p class="text-sm text-gray-500 mt-2 font-light italic">"Hold fast to the Sunnah, for in it lies safety."</p>
+                        </div>
+                        
+                        <!-- Center Dot -->
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full border-2 border-gold-500 bg-white z-10 group-hover:scale-150 group-hover:bg-gold-500 transition-all duration-200 shadow-[0_0_20px_rgba(251,191,36,0.4)]"></div>
+
+                        <div class="pl-12 md:pl-12 w-full md:w-5/12">
+                            <div class="md:hidden mb-2">
+                                <h3 class="font-serif text-2xl text-emerald-900">Hazrat Zakariyya RA</h3>
+                            </div>
+                            <div class="glass-panel p-4 md:p-6 rounded-xl group-hover:-translate-y-2 transition-transform duration-200">
+                                <span class="text-xs font-bold text-gold-600 uppercase tracking-widest">The Legacy</span>
+                                <p class="text-sm text-gray-600 mt-2 leading-relaxed">
+                                    A revival of the prophetic methodology in acquiring knowledge and purifying the self.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 2 -->
+                <div class="relative mb-24 reveal group">
+                    <div class="md:flex items-center justify-between flex-row-reverse">
+                        <div class="hidden md:block w-5/12 text-left pl-12">
+                            <h3 class="font-serif text-2xl text-emerald-900">Mufti Mukhtar-ud-Din DB</h3>
+                            <p class="text-sm text-gray-500 mt-2 font-light italic">"The heart finds rest only in the remembrance of Allah."</p>
+                        </div>
+                        
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full border-2 border-emerald-600 bg-white z-10 group-hover:scale-150 group-hover:bg-emerald-600 transition-all duration-200 shadow-[0_0_20px_rgba(5,150,105,0.4)]"></div>
+
+                        <div class="pl-12 md:pr-12 w-full md:w-5/12">
+                             <div class="md:hidden mb-2">
+                                <h3 class="font-serif text-2xl text-emerald-900">Mufti Mukhtar-ud-Din DB</h3>
+                            </div>
+                            <div class="glass-panel p-4 md:p-6 rounded-xl group-hover:-translate-y-2 transition-transform duration-200">
+                                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">The Guide</span>
+                                <p class="text-sm text-gray-600 mt-2 leading-relaxed">
+                                    Connecting the modern heart to ancient wisdom through establishing Khanqahs and educational institutes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 3 -->
+                <div class="relative reveal group">
+                    <div class="md:flex items-center justify-between">
+                         <div class="hidden md:block w-5/12 text-right pr-12">
+                            <h3 class="font-serif text-2xl text-emerald-900">Dar ul Eman</h3>
+                            <p class="text-sm text-gray-500 mt-2 font-light italic">A sanctuary for the seeker.</p>
+                        </div>
+
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full border-2 border-gray-400 bg-white z-10 group-hover:scale-150 group-hover:bg-emerald-900 transition-all duration-200"></div>
+
+                        <div class="pl-12 md:pl-12 w-full md:w-5/12">
+                             <div class="md:hidden mb-2">
+                                <h3 class="font-serif text-2xl text-emerald-900">Dar ul Eman</h3>
+                            </div>
+                            <div class="glass-panel p-4 md:p-6 rounded-xl group-hover:-translate-y-2 transition-transform duration-200">
+                                <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">The Movement</span>
+                                <p class="text-sm text-gray-600 mt-2 leading-relaxed">
+                                    Spreading the light of Iman and Taqwa across regions, fostering a community of practicing believers.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Objectives Section -->
+    <section class="py-12 md:py-20 bg-emerald-50/50" id="objectives">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center font-serif text-2xl md:text-3xl text-emerald-900 mb-8 md:mb-16 reveal">Pillars of the Mission</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+                <!-- Card 1 -->
+                <div class="group relative h-60 md:h-80 rounded-2xl bg-white border border-gray-100 hover:border-gold-300 transition-all duration-200 overflow-hidden shadow-sm hover:shadow-xl reveal cursor-pointer">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full px-4 group-hover:-translate-y-8 transition-transform duration-500">
+                        <div class="w-12 h-12 mx-auto mb-4 text-emerald-700">
+                            <i data-lucide="heart-handshake" class="w-full h-full stroke-1"></i>
+                        </div>
+                        <h3 class="font-serif text-lg text-gray-800">Purification</h3>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                        <p class="font-arabic text-center text-emerald-900 text-lg">قَدْ أَفْلَحَ مَن زَكَّاهَا</p>
+                        <p class="text-xs text-center text-gray-500 mt-2">"Successful indeed is the one who purifies their soul."</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="group relative h-60 md:h-80 rounded-2xl bg-white border border-gray-100 hover:border-gold-300 transition-all duration-200 overflow-hidden shadow-sm hover:shadow-xl reveal delay-75 cursor-pointer">
+                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full px-4 group-hover:-translate-y-8 transition-transform duration-500">
+                        <div class="w-12 h-12 mx-auto mb-4 text-emerald-700">
+                            <i data-lucide="book-open" class="w-full h-full stroke-1"></i>
+                        </div>
+                        <h3 class="font-serif text-lg text-gray-800">Knowledge</h3>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                         <p class="font-arabic text-center text-emerald-900 text-lg">رَبِّ زِدْنِي عِلْمًا</p>
+                         <p class="text-xs text-center text-gray-500 mt-2">"O my Lord, increase me in knowledge."</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="group relative h-60 md:h-80 rounded-2xl bg-white border border-gray-100 hover:border-gold-300 transition-all duration-200 overflow-hidden shadow-sm hover:shadow-xl reveal delay-100 cursor-pointer">
+                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full px-4 group-hover:-translate-y-8 transition-transform duration-500">
+                        <div class="w-12 h-12 mx-auto mb-4 text-emerald-700">
+                            <i data-lucide="users" class="w-full h-full stroke-1"></i>
+                        </div>
+                        <h3 class="font-serif text-lg text-gray-800">Community</h3>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                        <p class="text-xs text-center text-gray-500 mt-2">Building a network of support and righteous company.</p>
+                    </div>
+                </div>
+
+                 <!-- Card 4 -->
+                 <div class="group relative h-60 md:h-80 rounded-2xl bg-white border border-gray-100 hover:border-gold-300 transition-all duration-200 overflow-hidden shadow-sm hover:shadow-xl reveal delay-125 cursor-pointer">
+                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full px-4 group-hover:-translate-y-8 transition-transform duration-500">
+                        <div class="w-12 h-12 mx-auto mb-4 text-emerald-700">
+                            <i data-lucide="map-pin" class="w-full h-full stroke-1"></i>
+                        </div>
+                        <h3 class="font-serif text-lg text-gray-800">Markaz</h3>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                        <p class="text-xs text-center text-gray-500 mt-2">Centers of guidance established across the region.</p>
+                    </div>
+                </div>
+
+                 <!-- Card 5 -->
+                 <div class="group relative h-60 md:h-80 rounded-2xl bg-white border border-gray-100 hover:border-gold-300 transition-all duration-200 overflow-hidden shadow-sm hover:shadow-xl reveal delay-150 cursor-pointer">
+                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full px-4 group-hover:-translate-y-8 transition-transform duration-500">
+                        <div class="w-12 h-12 mx-auto mb-4 text-emerald-700">
+                            <i data-lucide="mic-2" class="w-full h-full stroke-1"></i>
+                        </div>
+                        <h3 class="font-serif text-lg text-gray-800">Dawah</h3>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                        <p class="text-xs text-center text-gray-500 mt-2">Inviting humanity towards the Creator with wisdom.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Media Section -->
+    <section class="py-12 md:py-24" id="media">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-12 reveal gap-4">
+                <div>
+                    <span class="text-gold-600 font-serif text-sm italic">Digital Library</span>
+                    <h2 class="font-serif text-4xl text-emerald-950 mt-2">Treasures of Knowledge</h2>
+                </div>
+                <!-- Search -->
+                <div class="relative w-full md:w-1/3">
+                    <input type="text" placeholder="What are you seeking today?" class="w-full bg-white/50 backdrop-blur border border-gray-200 rounded-full py-2 md:py-3 px-4 md:px-6 pl-10 md:pl-12 text-sm md:text-base focus:outline-none focus:border-gold-400 font-light placeholder-gray-400 transition-all duration-200">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px]">
+                <!-- Audio Card (Round/Compact) -->
+                <div class="glass-panel rounded-3xl p-4 md:p-6 flex flex-col justify-between hover:bg-white transition-colors duration-200 cursor-pointer reveal group">
+                    <div class="flex justify-between items-start">
+                        <div class="bg-emerald-100 p-2 rounded-full text-emerald-800">
+                            <i data-lucide="headphones" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400">32:10</span>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-xl text-emerald-900 group-hover:text-gold-600 transition-colors">Purification of the Soul</h3>
+                        <p class="text-sm text-gray-500 mt-1">Weekly Majlis - Lahore</p>
+                    </div>
+                    <div class="w-full bg-gray-100 h-8 rounded flex items-center gap-1 px-2 overflow-hidden">
+                        <!-- Simulated Waveform -->
+                        <div class="w-1 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                        <div class="w-1 h-5 bg-emerald-300 rounded-full animate-pulse delay-75"></div>
+                        <div class="w-1 h-4 bg-emerald-500 rounded-full animate-pulse delay-100"></div>
+                        <div class="w-1 h-6 bg-emerald-400 rounded-full animate-pulse delay-150"></div>
+                        <div class="w-1 h-3 bg-emerald-300 rounded-full animate-pulse delay-200"></div>
+                        <div class="w-1 h-5 bg-emerald-400 rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+
+                <!-- Video Card (Large) -->
+                <div class="glass-panel rounded-3xl md:col-span-2 overflow-hidden relative group cursor-pointer reveal delay-75">
+                    <img src="https://images.unsplash.com/photo-1598522387585-17a4c9e3dd17?q=80&w=1000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" alt="Gathering">
+                    <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-emerald-900/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 md:p-8">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-full flex items-center justify-center mb-4 text-white hover:bg-gold-500 hover:text-white transition-colors">
+                            <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                        </div>
+                        <h3 class="font-serif text-lg md:text-2xl text-white">Annual Convention 2024</h3>
+                        <p class="text-emerald-100 font-light mt-1">Highlights and key moments from the central gathering.</p>
+                    </div>
+                </div>
+
+                <!-- Book Card -->
+                <div class="glass-panel rounded-3xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-4 md:gap-6 hover:bg-white transition-colors duration-200 cursor-pointer reveal delay-100">
+                    <div class="w-20 h-28 md:w-24 md:h-32 bg-emerald-800 shadow-lg rounded-sm border-l-4 border-white/20 flex items-center justify-center flex-shrink-0">
+                         <span class="text-white/50 text-xs rotate-90 tracking-widest">KITAB</span>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-gold-600 uppercase tracking-wider">New Release</span>
+                        <h3 class="font-serif text-xl text-emerald-900 mt-1">The Path of Love</h3>
+                        <button class="text-sm text-gray-500 mt-4 border-b border-gray-300 pb-1 hover:text-emerald-700 hover:border-emerald-700 transition-all">Read PDF</button>
+                    </div>
+                </div>
+
+                <!-- Quote Card -->
+                 <div class="glass-panel rounded-3xl md:col-span-2 p-6 md:p-8 flex items-center justify-center bg-emerald-900 text-center relative overflow-hidden reveal delay-125">
+                     <div class="absolute top-0 right-0 p-12 opacity-10 text-white font-serif text-9xl leading-none">"</div>
+                     <div class="relative z-10">
+                        <p class="font-serif text-lg md:text-2xl text-emerald-50 leading-relaxed">
+                            "Do not look at the size of the sin, but look at the Greatness of the One you are disobeying."
+                        </p>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Locator Section -->
+    <section class="py-12 md:py-24 bg-gray-50 relative overflow-hidden" id="regions">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 items-center">
+            
+            <!-- Minimal Map Graphic Placeholder -->
+            <div class="md:col-span-2 relative h-80 md:h-[500px] bg-white rounded-3xl shadow-inner border border-gray-100 p-4 md:p-8 flex items-center justify-center overflow-hidden reveal">
+                <!-- Abstract Map dots -->
+                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#064e3b 1px, transparent 1px); background-size: 20px 20px;"></div>
+                
+                <div class="relative w-3/4 h-3/4">
+                    <!-- Stylized Pakistan Shape (Abstract) -->
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl filter">
+                        <path d="M60,180 C50,160 40,140 60,110 C70,95 65,80 80,60 C90,50 110,40 130,50 C150,60 160,80 150,110 C140,140 120,170 100,180 Z" fill="#ecfdf5" stroke="#d1fae5" stroke-width="2"/>
+                        
+                        <!-- Region Dots -->
+                        <circle cx="100" cy="150" r="3" fill="#059669" class="animate-pulse cursor-pointer hover:r-4 transition-all" onclick="showLocation('Karachi')">
+                            <title>Karachi</title>
+                        </circle>
+                        <circle cx="120" cy="90" r="3" fill="#059669" class="animate-pulse delay-75 cursor-pointer hover:r-4 transition-all" onclick="showLocation('Lahore')">
+                             <title>Lahore</title>
+                        </circle>
+                        <circle cx="110" cy="70" r="3" fill="#059669" class="animate-pulse delay-100 cursor-pointer hover:r-4 transition-all" onclick="showLocation('Islamabad')">
+                             <title>Islamabad</title>
+                        </circle>
+                         <circle cx="80" cy="80" r="3" fill="#059669" class="animate-pulse delay-150 cursor-pointer hover:r-4 transition-all" onclick="showLocation('Peshawar')">
+                             <title>Peshawar</title>
+                        </circle>
+                    </svg>
+                </div>
+
+                <div class="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2">
+                    <button class="glass-panel px-6 py-2 rounded-full text-sm text-emerald-900 hover:bg-emerald-50 transition-colors flex items-center gap-2">
+                        <i data-lucide="crosshair" class="w-4 h-4"></i>
+                        Detect My Region
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detail Drawer -->
+            <div class="reveal delay-75 mt-6 md:mt-0">
+                <span class="text-gold-600 font-serif text-sm italic">Find Guidance</span>
+                <h2 class="font-serif text-2xl md:text-3xl text-emerald-950 mt-2 mb-6">Our Markaz Network</h2>
+                
+                <div id="location-card" class="glass-panel p-4 md:p-8 rounded-2xl border-l-4 border-emerald-600">
+                    <h3 class="font-serif text-lg md:text-xl text-emerald-900" id="loc-city">Islamabad</h3>
+                    <p class="text-sm text-gray-500 mt-1 mb-4" id="loc-type">Central Markaz</p>
+                    
+                    <div class="space-y-3 text-sm text-gray-600">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-4 h-4 mt-1 text-gold-500"></i>
+                            <span id="loc-address">Sector H-11, Near Faizan-e-Madina</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="user" class="w-4 h-4 text-gold-500"></i>
+                            <span id="loc-ameer">Maulana Abdullah Sahib</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="clock" class="w-4 h-4 text-gold-500"></i>
+                            <span>Maghrib to Isha (Daily)</span>
+                        </div>
+                    </div>
+
+                    <button class="w-full mt-6 py-3 bg-emerald-900 text-white rounded-lg hover:bg-emerald-800 transition-colors text-sm font-light">
+                        Get Directions
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fatwa & Consultation -->
+    <section class="py-12 md:py-24" id="fatwa">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
+                
+                <!-- Chat Interface -->
+                <div class="reveal order-2 md:order-1">
+                     <span class="text-gold-600 font-serif text-sm italic">Ask a Scholar</span>
+                     <h2 class="font-serif text-2xl md:text-3xl text-emerald-950 mt-2 mb-6">Seek Guidance</h2>
+                     
+                     <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden text-sm md:text-base">
+                         <div class="bg-emerald-900 p-3 md:p-4 flex items-center gap-3">
+                             <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                             <span class="text-white text-sm font-light">Darul Ifta Online</span>
+                         </div>
+                         <div class="p-4 md:p-6 bg-gray-50 h-48 md:h-64 overflow-y-auto flex flex-col gap-4">
+                             <!-- Fake Chat History -->
+                             <div class="self-end bg-emerald-100 text-emerald-900 px-4 py-2 rounded-2xl rounded-tr-none text-sm max-w-[80%]">
+                                 Assalamu Alaikum, I have a question regarding trade ethics.
+                             </div>
+                             <div class="self-start bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-2xl rounded-tl-none text-sm max-w-[80%] shadow-sm">
+                                 Wa Alaikum Assalam. Please proceed with your query. It will be handled confidentially.
+                             </div>
+                         </div>
+                         <div class="p-3 md:p-4 bg-white border-t border-gray-100">
+                             <textarea placeholder="Write your question with adab..." class="w-full text-xs md:text-sm resize-none focus:outline-none text-gray-700 mb-2 h-16 md:h-20"></textarea>
+                             <div class="flex justify-between items-center">
+                                 <div class="flex items-center gap-2">
+                                     <button class="text-gray-400 hover:text-emerald-600"><i data-lucide="paperclip" class="w-4 h-4"></i></button>
+                                     <label class="flex items-center gap-2 cursor-pointer">
+                                         <input type="checkbox" class="accent-emerald-600 w-3 h-3">
+                                         <span class="text-xs text-gray-500">Private</span>
+                                     </label>
+                                 </div>
+                                 <button class="bg-gold-500 text-white p-2 rounded-full hover:bg-gold-600 transition-colors">
+                                     <i data-lucide="send" class="w-4 h-4"></i>
+                                 </button>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+
+                <!-- Recent Fatawa List -->
+                <div class="reveal delay-75 pl-0 md:pl-10 order-1 md:order-2">
+                    <h3 class="font-serif text-lg md:text-xl text-gray-800 mb-6 mt-6 md:mt-10">Recent Rulings</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Item 1 -->
+                        <div class="bg-white p-4 rounded-lg shadow-sm border-l-2 border-emerald-500 cursor-pointer hover:shadow-md transition-shadow group">
+                            <div class="flex justify-between items-center">
+                                <h4 class="text-sm font-medium text-gray-800 group-hover:text-emerald-700">Ruling on Digital Currencies</h4>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                            </div>
+                        </div>
+                         <!-- Item 2 -->
+                        <div class="bg-white p-4 rounded-lg shadow-sm border-l-2 border-gray-200 cursor-pointer hover:shadow-md transition-shadow group">
+                            <div class="flex justify-between items-center">
+                                <h4 class="text-sm font-medium text-gray-800 group-hover:text-emerald-700">Conditions for Zakat on Jewelry</h4>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                            </div>
+                        </div>
+                         <!-- Item 3 -->
+                        <div class="bg-white p-4 rounded-lg shadow-sm border-l-2 border-gray-200 cursor-pointer hover:shadow-md transition-shadow group">
+                            <div class="flex justify-between items-center">
+                                <h4 class="text-sm font-medium text-gray-800 group-hover:text-emerald-700">Sunnah method of Nikah</h4>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Section -->
+    <section class="py-16 md:py-32 bg-white text-center">
+        <div class="container mx-auto px-6 reveal">
+            <h2 class="font-serif text-3xl md:text-4xl text-emerald-950 mb-8 md:mb-12">Be Part of the Effort</h2>
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-6">
+                <a href="#" class="px-6 md:px-10 py-2 md:py-4 border border-emerald-900 text-emerald-900 text-sm md:text-base font-sans tracking-wide hover:bg-emerald-900 hover:text-white transition-all duration-200">Become a Volunteer</a>
+                <a href="#" class="px-6 md:px-10 py-2 md:py-4 bg-emerald-900 text-white text-sm md:text-base font-sans tracking-wide hover:bg-emerald-800 transition-all duration-200 shadow-lg shadow-emerald-900/20">Join a Dars Circle</a>
+                <a href="#" class="px-6 md:px-10 py-2 md:py-4 border border-emerald-900 text-emerald-900 text-sm md:text-base font-sans tracking-wide hover:bg-emerald-900 hover:text-white transition-all duration-200">Invite a Bayaan</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 pt-12 md:pt-20 pb-10 border-t border-gray-200">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-16">
+                
+                <!-- Brand -->
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                         <div class="w-6 h-6 rounded-full border border-gold-600 flex items-center justify-center">
+                            <span class="font-arabic text-gold-600 text-xs">د</span>
+                        </div>
+                        <span class="font-serif font-bold text-lg text-emerald-950">Dar ul Eman</span>
+                    </div>
+                    <p class="text-gray-500 text-xs md:text-sm leading-relaxed">
+                        Striving to revive the prophetic way of life in the modern age through knowledge, spirituality, and service.
+                    </p>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4 md:mb-6 text-xs md:text-sm uppercase tracking-wider">Explore</h4>
+                    <ul class="space-y-2 md:space-y-3 text-xs md:text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-emerald-700 transition-colors">Our History</a></li>
+                        <li><a href="#" class="hover:text-emerald-700 transition-colors">Publications</a></li>
+                        <li><a href="#" class="hover:text-emerald-700 transition-colors">Audio Stream</a></li>
+                        <li><a href="#" class="hover:text-emerald-700 transition-colors">Events Calendar</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4 md:mb-6 text-xs md:text-sm uppercase tracking-wider">Contact</h4>
+                    <ul class="space-y-2 md:space-y-3 text-xs md:text-sm text-gray-500">
+                        <li>info@daruleman.org</li>
+                        <li>+92 300 1234567</li>
+                        <li>Islamabad, Pakistan</li>
+                    </ul>
+                </div>
+
+                <!-- Prayer Widget -->
+                <div>
+                    <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-gray-200">
+                        <div class="flex justify-between items-center mb-3 border-b border-gray-100 pb-2">
+                            <span class="text-xs font-bold text-gray-400">HIJRI</span>
+                            <span class="text-xs md:text-sm font-serif text-emerald-800">14 Jumada II, 1445</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="block text-xs text-gray-400 mb-1">NEXT PRAYER</span>
+                            <span class="block text-xl md:text-2xl font-serif text-emerald-900">Maghrib</span>
+                            <span class="block text-gold-600 text-base md:text-lg font-mono">5:12 PM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-200 text-xs text-gray-400">
+                <p>&copy; 2024 Dar ul Eman wa al-Taqwa. All rights reserved.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-gray-600">Privacy Policy</a>
+                    <a href="#" class="hover:text-gray-600">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        let mobileMenuOpen = false;
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (!menu) return;
+            
+            mobileMenuOpen = !mobileMenuOpen;
+            
+            if (mobileMenuOpen) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex', 'absolute', 'top-full', 'left-0', 'right-0', 'flex-col', 'bg-white', 'shadow-lg', 'p-4', 'gap-3', 'rounded-b-2xl', 'z-40', 'border-t', 'border-gray-100');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex', 'absolute', 'top-full', 'left-0', 'right-0', 'flex-col', 'bg-white', 'shadow-lg', 'p-4', 'gap-3', 'rounded-b-2xl', 'z-40', 'border-t', 'border-gray-100');
+            }
+        }
+        
+        function closeMobileMenu() {
+            if (mobileMenuOpen) {
+                mobileMenuOpen = false;
+                const menu = document.getElementById('mobile-menu');
+                if (menu) {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('flex', 'absolute', 'top-full', 'left-0', 'right-0', 'flex-col', 'bg-white', 'shadow-lg', 'p-4', 'gap-3', 'rounded-b-2xl', 'z-40', 'border-t', 'border-gray-100');
+                }
+            }
+        }
+
+        // Close mobile menu when scrolling
+        window.addEventListener('scroll', closeMobileMenu, { passive: true });
+
+        // Close mobile menu when clicking a link
+        window.addEventListener('DOMContentLoaded', () => {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) {
+                menu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', closeMobileMenu);
+                });
+            }
+        });
+
+        // Also close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const nav = document.querySelector('nav');
+            if (!nav.contains(e.target) && mobileMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+
+        // Reveal on Scroll Logic
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 150;
+
+            revealElements.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        // Trigger once on load
+        revealOnScroll();
+
+        // Tasbeeh Logic
+        let count = 0;
+        const countDisplay = document.getElementById('tasbeeh-count');
+        const widget = document.getElementById('tasbeeh-widget');
+        let widgetVisible = false;
+
+        function toggleTasbeeh() {
+            widgetVisible = !widgetVisible;
+            if(widgetVisible) {
+                widget.classList.remove('opacity-0', 'translate-y-20', 'pointer-events-none');
+            } else {
+                widget.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none');
+            }
+        }
+
+        function countTasbeeh() {
+            count++;
+            countDisplay.innerText = count;
+            
+            // Subtle vibration if supported (mobile)
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
+
+        function resetTasbeeh() {
+            count = 0;
+            countDisplay.innerText = 0;
+        }
+
+        // Map Location Logic
+        const locations = {
+            'Karachi': { address: 'Plot 4, DHA Phase 6', ameer: 'Mufti Ahmed', type: 'Regional Markaz' },
+            'Lahore': { address: 'Raiwind Road, Near Bahria', ameer: 'Maulana Tariq', type: 'Educational Institute' },
+            'Islamabad': { address: 'Sector H-11, Near Faizan', ameer: 'Maulana Abdullah', type: 'Central Markaz' },
+            'Peshawar': { address: 'Hayatabad Phase 3', ameer: 'Sheikh Yusuf', type: 'Khanqah' },
+        };
+
+        function showLocation(city) {
+            const data = locations[city];
+            if (!data) return;
+
+            // Update Text
+            document.getElementById('loc-city').innerText = city;
+            document.getElementById('loc-type').innerText = data.type;
+            document.getElementById('loc-address').innerText = data.address;
+            document.getElementById('loc-ameer').innerText = data.ameer;
+
+            // Highlight animation for the card
+            const card = document.getElementById('location-card');
+            card.classList.remove('border-l-4');
+            void card.offsetWidth; // trigger reflow
+            card.classList.add('border-l-4');
+        }
+    </script>
+</body>
+</html>
